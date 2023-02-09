@@ -39,14 +39,12 @@ class _TarefaState extends State<Tarefa> {
                       height: 100,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(4),
-                        child: Image.network(
-                          widget.foto,
-                          fit: BoxFit.cover,
+                        child: Image.asset(
+                          (widget.foto != "") ? widget.foto : "assets/images/nophoto.png", 
                           errorBuilder: (context, error, stackTrace) {
-                            return Center(
-                              child: Text("Erro ao carregar a imagem"),
-                            );
+                            return Container();
                           },
+                          fit: BoxFit.cover,
                         ),
                       ),
                     ),
