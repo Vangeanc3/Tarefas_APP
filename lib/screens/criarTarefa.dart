@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tarefas_app/data/tarefa_inherited.dart';
 
 class CriarTarefa extends StatefulWidget {
-  const CriarTarefa({super.key, required this.tarefaContext});
+   CriarTarefa({super.key, required this.tarefaContext});
 
   final BuildContext tarefaContext;
 
@@ -16,6 +16,22 @@ class _CriarTarefaState extends State<CriarTarefa> {
   var imageController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
+
+  bool validarValor(String? valor) {
+    if (valor != null && valor.isEmpty) {
+      return true;
+    }
+    return false;
+  }
+
+  bool validarDificuldade(String? valor) {
+    if (valor != null && valor.isEmpty) {
+      if (int.parse(valor) > 5 || int.parse(valor) < 1) {
+        return true;
+      }
+    }
+    return false;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +59,7 @@ class _CriarTarefaState extends State<CriarTarefa> {
                     child: TextFormField(
                       controller: nomeController,
                       validator: (String? value) {
-                        if (value != null && value.isEmpty) {
+                        if (validarValor(value)) {
                           return ("Insira o nome da tarefa");
                         } else {
                           return null;
@@ -62,9 +78,7 @@ class _CriarTarefaState extends State<CriarTarefa> {
                     child: TextFormField(
                       controller: dificuldadeController,
                       validator: (value) {
-                        if (value!.isEmpty ||
-                            int.parse(value) > 5 ||
-                            int.parse(value) < 1) {
+                        if (validarDificuldade(value)) {
                           return ("Insira uma dificuldade entre 1 e 5");
                         } else {
                           return null;
@@ -84,7 +98,7 @@ class _CriarTarefaState extends State<CriarTarefa> {
                     child: TextFormField(
                       controller: imageController,
                       validator: (value) {
-                        if (value!.isEmpty) {
+                        if (validarValor(value)) {
                           return ("Insira uma URL de uma imagem");
                         } else {
                           return null;
@@ -124,10 +138,12 @@ class _CriarTarefaState extends State<CriarTarefa> {
                   ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          TarefaInherited.of(widget.tarefaContext).novaTarefa(
-                              nomeController.text,
-                              imageController.text,
-                              int.parse(dificuldadeController.text));
+                          setState(() {
+                            TarefaInherited.of(widget.tarefaContext).novaTarefa(
+                                nomeController.text,
+                                imageController.text,
+                                int.parse(dificuldadeController.text));
+                          });
 
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(

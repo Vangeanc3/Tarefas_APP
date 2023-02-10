@@ -5,14 +5,23 @@ class Tarefa extends StatefulWidget {
   final String texto;
   final String foto;
   final int dificuldadeLevel;
-  const Tarefa(this.texto, this.foto, this.dificuldadeLevel, {super.key});
+
+  Tarefa(this.texto, this.foto, this.dificuldadeLevel, {super.key});
+
+  int nivel = 0;
 
   @override
   State<Tarefa> createState() => _TarefaState();
 }
 
 class _TarefaState extends State<Tarefa> {
-  int nivel = 0;
+  bool AssetsOuNetwork() {
+    if (widget.foto.contains('http')) {
+      return false;
+    }
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -38,15 +47,26 @@ class _TarefaState extends State<Tarefa> {
                       width: 72,
                       height: 100,
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(4),
-                        child: Image.asset(
-                          (widget.foto != "") ? widget.foto : "assets/images/nophoto.png", 
-                          errorBuilder: (context, error, stackTrace) {
-                            return Container();
-                          },
-                          fit: BoxFit.cover,
-                        ),
-                      ),
+                          borderRadius: BorderRadius.circular(4),
+                          child: AssetsOuNetwork()
+                              ? Image.asset(
+                                  (widget.foto != "")
+                                      ? widget.foto
+                                      : "assets/images/nophoto.png",
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return Container();
+                                  },
+                                  fit: BoxFit.cover,
+                                )
+                              : Image.network(
+                                  (widget.foto != "")
+                                      ? widget.foto
+                                      : "assets/images/nophoto.png",
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return Container();
+                                  },
+                                  fit: BoxFit.cover,
+                                )),
                     ),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -65,7 +85,7 @@ class _TarefaState extends State<Tarefa> {
                     ),
                     ElevatedButton(
                         onPressed: () => setState(() {
-                              nivel++;
+                              widget.nivel++;
                             }),
                         child: Icon(Icons.arrow_drop_up))
                   ],
@@ -76,18 +96,18 @@ class _TarefaState extends State<Tarefa> {
                 Padding(
                   padding: EdgeInsets.all(8.0),
                   child: SizedBox(
-                    width: 250,
+                    width: 225,
                     child: LinearProgressIndicator(
                       color: Colors.white,
                       value: (widget.dificuldadeLevel >= 1)
-                          ? ((nivel / widget.dificuldadeLevel) / 10)
+                          ? ((widget.nivel / widget.dificuldadeLevel) / 10)
                           : 1,
                     ),
                   ),
                 ),
                 Padding(
                   padding: EdgeInsets.all(12.0),
-                  child: Text("Nivel: $nivel",
+                  child: Text("Nivel: ${widget.nivel}",
                       style: TextStyle(color: Colors.white)),
                 ),
               ],
