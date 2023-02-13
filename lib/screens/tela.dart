@@ -1,10 +1,11 @@
 // ignore: file_names
 import 'package:flutter/material.dart';
 import 'package:tarefas_app/components/tarefas.dart';
-import 'package:tarefas_app/data/tarefa_inherited.dart';
 import 'package:tarefas_app/screens/criarTarefa.dart';
+import 'package:tarefas_app/data/tarefa_dao.dart';
 
 class Tela extends StatefulWidget {
+  // ignore: prefer_const_constructors_in_immutables
   Tela({super.key});
 
   @override
@@ -19,10 +20,72 @@ class _TelaState extends State<Tela> {
         leading: Container(),
         title: const Text("Tarefas"),
       ),
-      body: ListView(
-        // ignore: prefer_const_literals_to_create_immutables
-        children: TarefaInherited.of(context).listaTarefas,
-        padding: const EdgeInsets.only(top: 8, bottom: 70),
+      body: Padding(
+        padding: EdgeInsets.only(top: 8, bottom: 70),
+        child: FutureBuilder<List<Tarefa>>(
+            future: TarefaDao().findAll(),
+            builder: (context, snapshot) {
+              List<Tarefa>? items = snapshot.data;
+              switch (snapshot.connectionState) {
+                case ConnectionState.none:
+                  return Center(
+                    child: Column(
+                      children: const [
+                        CircularProgressIndicator(),
+                        Text('Carregando'),
+                      ],
+                    ),
+                  );
+
+                case ConnectionState.waiting:
+                  return Center(
+                    child: Column(
+                      children: const [
+                        CircularProgressIndicator(),
+                        Text('Carregando'),
+                      ],
+                    ),
+                  );
+                case ConnectionState.active:
+                  return Center(
+                    child: Column(
+                      children: const [
+                        CircularProgressIndicator(),
+                        Text('Carregando'),
+                      ],
+                    ),
+                  );
+                case ConnectionState.done:
+                  if (snapshot.hasData && items != null) {
+                    if (items.isNotEmpty) {
+                      return ListView.builder(
+                          itemCount: items.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            final Tarefa tarefa = items[index];
+                            return tarefa;
+                          });
+                    }
+                    return Center(
+                        child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      // não implementado em vídeo por descuido meu, desculpem.
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      // essa linha de layout deixa o conteudo totalmente centralizado.
+                      children: const [
+                        Icon(
+                          Icons.error_outline,
+                          size: 128,
+                        ),
+                        Text(
+                          'Não há nenhuma Tarefa',
+                          style: TextStyle(fontSize: 32),
+                        ),
+                      ],
+                    ));
+                  }
+                  return const Text('Erro ao carregar tarefas');
+              }
+            }),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
