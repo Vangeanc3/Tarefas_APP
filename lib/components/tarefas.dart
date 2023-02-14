@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tarefas_app/data/tarefa_dao.dart';
 import 'dificuldade.dart';
 
 class Tarefa extends StatefulWidget {
@@ -15,7 +16,8 @@ class Tarefa extends StatefulWidget {
 }
 
 class _TarefaState extends State<Tarefa> {
-  bool AssetsOuNetwork() {
+ 
+  bool assetsOuNetwork() {
     if (widget.foto.contains('http')) {
       return false;
     }
@@ -48,7 +50,7 @@ class _TarefaState extends State<Tarefa> {
                       height: 100,
                       child: ClipRRect(
                           borderRadius: BorderRadius.circular(4),
-                          child: AssetsOuNetwork()
+                          child: assetsOuNetwork()
                               ? Image.asset(
                                   (widget.foto != "")
                                       ? widget.foto
@@ -84,6 +86,9 @@ class _TarefaState extends State<Tarefa> {
                       ],
                     ),
                     ElevatedButton(
+                        onLongPress: () {
+                          TarefaDao().delete(widget.texto);
+                        },
                         onPressed: () => setState(() {
                               widget.nivel++;
                             }),

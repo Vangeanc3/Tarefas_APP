@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tarefas_app/data/tarefa_inherited.dart';
+import 'package:tarefas_app/screens/criarTarefa.dart';
 import 'package:tarefas_app/screens/tela.dart';
 
 void main() {
@@ -17,7 +17,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: TarefaInherited(child: Tela()),
+      initialRoute: "/home",
+      routes: {
+        "/home": (context) => const Tela(),
+        "/formulario":(context) => const CriarTarefa()
+      },
     );
   }
 }

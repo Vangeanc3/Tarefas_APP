@@ -8,7 +8,7 @@ class TarefaDao {
       '$_dificuldade INTEGER,'
       '$_imagem TEXT)';
 
-  static const String _nomeTabela = 'tarfeaTable';
+  static const String _nomeTabela = 'tarefaTable';
   static const String _nome = 'nome';
   static const String _dificuldade = 'dificuldade';
   static const String _imagem = 'imagem';

@@ -1,27 +1,37 @@
 // ignore: file_names
 import 'package:flutter/material.dart';
 import 'package:tarefas_app/components/tarefas.dart';
-import 'package:tarefas_app/screens/criarTarefa.dart';
 import 'package:tarefas_app/data/tarefa_dao.dart';
 
 class Tela extends StatefulWidget {
   // ignore: prefer_const_constructors_in_immutables
-  Tela({super.key});
+  const Tela({super.key});
 
   @override
   State<Tela> createState() => _TelaState();
 }
 
 class _TelaState extends State<Tela> {
+  void navegarAtualizar(BuildContext contexto) async {
+    await Navigator.of(contexto).pushNamed("/formulario");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         leading: Container(),
         title: const Text("Tarefas"),
+        actions: [
+          IconButton(
+              onPressed: () {
+                setState(() {});
+              },
+              icon: const Icon(Icons.refresh))
+        ],
       ),
       body: Padding(
-        padding: EdgeInsets.only(top: 8, bottom: 70),
+        padding: const EdgeInsets.only(top: 8, bottom: 70),
         child: FutureBuilder<List<Tarefa>>(
             future: TarefaDao().findAll(),
             builder: (context, snapshot) {
@@ -88,13 +98,7 @@ class _TelaState extends State<Tela> {
             }),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (contextNovo) => CriarTarefa(tarefaContext: context),
-              ));
-        },
+        onPressed: () => navegarAtualizar(context),
         child: const Icon(Icons.add),
       ),
     );

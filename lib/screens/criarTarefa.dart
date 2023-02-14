@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:tarefas_app/data/tarefa_inherited.dart';
+import '../components/tarefas.dart';
+import '../data/tarefa_dao.dart';
 
 class CriarTarefa extends StatefulWidget {
-   CriarTarefa({super.key, required this.tarefaContext});
+  const CriarTarefa({super.key});
 
-  final BuildContext tarefaContext;
 
   @override
   State<CriarTarefa> createState() => _CriarTarefaState();
@@ -65,7 +65,7 @@ class _CriarTarefaState extends State<CriarTarefa> {
                           return null;
                         }
                       },
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         hintText: "Nome",
                         fillColor: Colors.white70,
@@ -85,7 +85,7 @@ class _CriarTarefaState extends State<CriarTarefa> {
                         }
                       },
                       keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         hintText: "Dificuldade",
                         fillColor: Colors.white70,
@@ -108,7 +108,7 @@ class _CriarTarefaState extends State<CriarTarefa> {
                         setState(() {});
                       },
                       keyboardType: TextInputType.url,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         hintText: "Imagem",
                         fillColor: Colors.white70,
@@ -138,12 +138,10 @@ class _CriarTarefaState extends State<CriarTarefa> {
                   ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          setState(() {
-                            TarefaInherited.of(widget.tarefaContext).novaTarefa(
-                                nomeController.text,
-                                imageController.text,
-                                int.parse(dificuldadeController.text));
-                          });
+                          TarefaDao().save(Tarefa(
+                              nomeController.text,
+                              imageController.text,
+                              int.parse(dificuldadeController.text)));
 
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
@@ -151,10 +149,10 @@ class _CriarTarefaState extends State<CriarTarefa> {
                             ),
                           );
 
-                          Navigator.pop(context);
+                          Navigator.of(context).pop();
                         }
                       },
-                      child: Text("Adicionar"))
+                      child: const Text("Adicionar"))
                 ],
               ),
             ),
