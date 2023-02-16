@@ -38,22 +38,24 @@ class TarefaDao {
     return tarefas;
   }
 
-  save(Tarefa tarefa) async {
+  Future<bool> save(Tarefa tarefa) async {
     print('Iniciando o save: ');
     final Database bancoDeDados = await getDatabase();
     var itemExiste = await find(tarefa.texto);
     Map<String, dynamic> taskMap = toMap(tarefa);
     if (itemExiste.isEmpty) {
       print('a Tarefa não Existia.');
-      return await bancoDeDados.insert(_nomeTabela, taskMap);
+      await bancoDeDados.insert(_nomeTabela, taskMap);
+      return true;
     } else {
       print('a Tarefa existia!');
-      return await bancoDeDados.update(
+      await bancoDeDados.update(
         _nomeTabela,
         taskMap,
         where: '$_nome = ?',
         whereArgs: [tarefa.texto],
       );
+      return false;
     }
   }
 

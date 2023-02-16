@@ -12,10 +12,6 @@ class Tela extends StatefulWidget {
 }
 
 class _TelaState extends State<Tela> {
-  void navegarAtualizar(BuildContext contexto) async {
-    await Navigator.of(contexto).pushNamed("/formulario");
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -102,5 +98,25 @@ class _TelaState extends State<Tela> {
         child: const Icon(Icons.add),
       ),
     );
+  }
+
+  void navegarAtualizar(BuildContext context) async {
+    await Navigator.of(context).pushNamed("/formulario").then((value) {
+      switch (value) {
+        case false:
+          setState(() {});
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("Erro em adicionar uma tarefa"),
+          ));
+          break;
+        case true:
+          setState(() {});
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("Sucesso em adicionar a tarefa"),
+          ));
+          break;
+        default:
+      }
+    });
   }
 }

@@ -5,7 +5,6 @@ import '../data/tarefa_dao.dart';
 class CriarTarefa extends StatefulWidget {
   const CriarTarefa({super.key});
 
-
   @override
   State<CriarTarefa> createState() => _CriarTarefaState();
 }
@@ -138,18 +137,7 @@ class _CriarTarefaState extends State<CriarTarefa> {
                   ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          TarefaDao().save(Tarefa(
-                              nomeController.text,
-                              imageController.text,
-                              int.parse(dificuldadeController.text)));
-
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text("Salvando nova tarefa"),
-                            ),
-                          );
-
-                          Navigator.of(context).pop();
+                          inserirTarefa(context);
                         }
                       },
                       child: const Text("Adicionar"))
@@ -160,5 +148,15 @@ class _CriarTarefaState extends State<CriarTarefa> {
         ),
       ),
     );
+  }
+
+  inserirTarefa(BuildContext context) async {
+    Tarefa tarefa = Tarefa(nomeController.text, imageController.text,
+        int.parse(dificuldadeController.text));
+    await TarefaDao().save(tarefa).then((value) {
+      Future.delayed(const Duration(seconds: 1), () {
+        Navigator.of(context).pop(value);
+      });
+    });
   }
 }
