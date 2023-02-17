@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../components/tarefas.dart';
+import '../components/tarefa_card.dart';
 import '../data/tarefa_dao.dart';
+import '../models/tarefa.dart';
 
 class CriarTarefa extends StatefulWidget {
   const CriarTarefa({super.key});
@@ -151,8 +152,7 @@ class _CriarTarefaState extends State<CriarTarefa> {
   }
 
   inserirTarefa(BuildContext context) async {
-    Tarefa tarefa = Tarefa(nomeController.text, imageController.text,
-        int.parse(dificuldadeController.text));
+    Tarefa_Card tarefa = Tarefa_Card(Tarefa(titulo: nomeController.text, dificuldade: int.parse(dificuldadeController.text), urlFoto: imageController.text));
     await TarefaDao().save(tarefa).then((value) {
       Future.delayed(const Duration(seconds: 1), () {
         Navigator.of(context).pop(value);

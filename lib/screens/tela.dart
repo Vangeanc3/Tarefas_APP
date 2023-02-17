@@ -1,6 +1,6 @@
 // ignore: file_names
 import 'package:flutter/material.dart';
-import 'package:tarefas_app/components/tarefas.dart';
+import 'package:tarefas_app/components/tarefa_card.dart';
 import 'package:tarefas_app/data/tarefa_dao.dart';
 
 class Tela extends StatefulWidget {
@@ -28,10 +28,10 @@ class _TelaState extends State<Tela> {
       ),
       body: Padding(
         padding: const EdgeInsets.only(top: 8, bottom: 70),
-        child: FutureBuilder<List<Tarefa>>(
+        child: FutureBuilder<List<Tarefa_Card>>(
             future: TarefaDao().findAll(),
             builder: (context, snapshot) {
-              List<Tarefa>? items = snapshot.data;
+              List<Tarefa_Card>? items = snapshot.data;
               switch (snapshot.connectionState) {
                 case ConnectionState.none:
                   return Center(
@@ -67,7 +67,7 @@ class _TelaState extends State<Tela> {
                       return ListView.builder(
                           itemCount: items.length,
                           itemBuilder: (BuildContext context, int index) {
-                            final Tarefa tarefa = items[index];
+                            final Tarefa_Card tarefa = items[index];
                             return tarefa;
                           });
                     }

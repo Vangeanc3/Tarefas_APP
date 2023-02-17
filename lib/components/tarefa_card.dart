@@ -1,24 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:tarefas_app/data/tarefa_dao.dart';
+import '../models/tarefa.dart';
 import 'dificuldade.dart';
 
-class Tarefa extends StatefulWidget {
-  final String texto;
-  final String foto;
-  final int dificuldadeLevel;
+class Tarefa_Card extends StatefulWidget {
+  Tarefa tarefa;
 
-  Tarefa(this.texto, this.foto, this.dificuldadeLevel, {super.key});
+  Tarefa_Card(this.tarefa, {super.key});
 
   int nivel = 0;
 
   @override
-  State<Tarefa> createState() => _TarefaState();
+  State<Tarefa_Card> createState() => _Tarefa_CardState();
 }
 
-class _TarefaState extends State<Tarefa> {
- 
+class _Tarefa_CardState extends State<Tarefa_Card> {
   bool assetsOuNetwork() {
-    if (widget.foto.contains('http')) {
+    if (widget.tarefa.urlFoto.contains('http')) {
       return false;
     }
     return true;
@@ -52,8 +50,8 @@ class _TarefaState extends State<Tarefa> {
                           borderRadius: BorderRadius.circular(4),
                           child: assetsOuNetwork()
                               ? Image.asset(
-                                  (widget.foto != "")
-                                      ? widget.foto
+                                  (widget.tarefa.urlFoto != "")
+                                      ? widget.tarefa.urlFoto
                                       : "assets/images/nophoto.png",
                                   errorBuilder: (context, error, stackTrace) {
                                     return Container();
@@ -61,8 +59,8 @@ class _TarefaState extends State<Tarefa> {
                                   fit: BoxFit.cover,
                                 )
                               : Image.network(
-                                  (widget.foto != "")
-                                      ? widget.foto
+                                  (widget.tarefa.urlFoto != "")
+                                      ? widget.tarefa.urlFoto
                                       : "assets/images/nophoto.png",
                                   errorBuilder: (context, error, stackTrace) {
                                     return Container();
@@ -76,18 +74,18 @@ class _TarefaState extends State<Tarefa> {
                       children: [
                         SizedBox(
                             width: 200,
-                            child: Text(widget.texto,
+                            child: Text(widget.tarefa.titulo,
                                 style: TextStyle(
                                     fontSize: 20,
                                     overflow: TextOverflow.ellipsis))),
                         Dificuldade(
-                          dificuldadeLevel: widget.dificuldadeLevel,
+                          dificuldadeLevel: widget.tarefa.dificuldade,
                         )
                       ],
                     ),
                     ElevatedButton(
                         onLongPress: () {
-                          TarefaDao().delete(widget.texto);
+                          TarefaDao().delete(widget.tarefa.titulo);
                         },
                         onPressed: () => setState(() {
                               widget.nivel++;
@@ -104,8 +102,8 @@ class _TarefaState extends State<Tarefa> {
                     width: 225,
                     child: LinearProgressIndicator(
                       color: Colors.white,
-                      value: (widget.dificuldadeLevel >= 1)
-                          ? ((widget.nivel / widget.dificuldadeLevel) / 10)
+                      value: (widget.tarefa.dificuldade >= 1)
+                          ? ((widget.nivel / widget.tarefa.dificuldade) / 10)
                           : 1,
                     ),
                   ),

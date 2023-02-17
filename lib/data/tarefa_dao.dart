@@ -1,5 +1,6 @@
 import 'package:sqflite/sqflite.dart';
-import 'package:tarefas_app/components/tarefas.dart';
+import 'package:tarefas_app/components/tarefa_card.dart';
+import 'package:tarefas_app/models/tarefa.dart';
 import 'database.dart';
 
 class TarefaDao {
@@ -13,35 +14,36 @@ class TarefaDao {
   static const String _dificuldade = 'dificuldade';
   static const String _imagem = 'imagem';
 
-  Map<String, dynamic> toMap(Tarefa tarefa) {
+  Map<String, dynamic> toMap(Tarefa_Card tarefa) {
     print('Convertendo to Map: ');
     final Map<String, dynamic> mapaDeTarefas = Map();
-    mapaDeTarefas[_nome] = tarefa.texto;
-    mapaDeTarefas[_dificuldade] = tarefa.dificuldadeLevel;
-    mapaDeTarefas[_imagem] = tarefa.foto;
+    mapaDeTarefas[_nome] = tarefa.tarefa.titulo;
+    mapaDeTarefas[_dificuldade] = tarefa.tarefa.dificuldade;
+    mapaDeTarefas[_imagem] = tarefa.tarefa.urlFoto;
     print('Mapa de Tarefas: $mapaDeTarefas');
     return mapaDeTarefas;
   }
 
-  List<Tarefa> toList(List<Map<String, dynamic>> mapaDeTarefas) {
+  List<Tarefa_Card> toList(List<Map<String, dynamic>> mapaDeTarefas) {
     print('Convertendo to List:');
-    final List<Tarefa> tarefas = [];
+    final List<Tarefa_Card> tarefas = [];
     for (Map<String, dynamic> linha in mapaDeTarefas) {
-      final Tarefa tarefa = Tarefa(
-        linha[_nome],
-        linha[_imagem],
-        linha[_dificuldade],
+      final Tarefa_Card tarefa = Tarefa_Card(
+        Tarefa(
+            titulo: linha[_nome],
+            dificuldade: linha[_dificuldade],
+            urlFoto: linha[_imagem]),
       );
-      tarefas.add(tarefa);
+    tarefas.add(tarefa);
     }
     print('Lista de Tarefas: ${tarefas.toString()}');
     return tarefas;
   }
 
-  Future<bool> save(Tarefa tarefa) async {
+  Future<bool> save(Tarefa_Card tarefa) async {
     print('Iniciando o save: ');
     final Database bancoDeDados = await getDatabase();
-    var itemExiste = await find(tarefa.texto);
+    var itemExiste = await find(tarefa.tarefa.titulo);
     Map<String, dynamic> taskMap = toMap(tarefa);
     if (itemExiste.isEmpty) {
       print('a Tarefa não Existia.');
@@ -53,13 +55,13 @@ class TarefaDao {
         _nomeTabela,
         taskMap,
         where: '$_nome = ?',
-        whereArgs: [tarefa.texto],
+        whereArgs: [tarefa.tarefa.titulo],
       );
       return false;
     }
   }
 
-  Future<List<Tarefa>> findAll() async {
+  Future<List<Tarefa_Card>> findAll() async {
     print('Acessando o findAll: ');
     final Database bancoDeDados = await getDatabase();
     final List<Map<String, dynamic>> result =
@@ -68,7 +70,7 @@ class TarefaDao {
     return toList(result);
   }
 
-  Future<List<Tarefa>> find(String nomeDaTarefa) async {
+  Future<List<Tarefa_Card>> find(String nomeDaTarefa) async {
     print('Acessando find: ');
     final Database bancoDeDados = await getDatabase();
     print('Procurando tarefa com o nome: ${nomeDaTarefa}');
