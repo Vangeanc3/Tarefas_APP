@@ -9,70 +9,28 @@ import 'package:tarefas_app/models/tarefa.dart';
 import 'logging_interceptors_service.dart';
 
 class TarefaService {
-  static const String url = "https://192.168.38.78:7056/tarefa/";
+  static const String url = "https://vangeanceapp.azurewebsites.net/";
+  static const String buscar = "tarefa/buscar";
+  static const String criar = "tarefa/criar";
+  static const String atualizar = "tarefa/atualizar";
+  static const String deletar = "tarefa/deletar";
 
   http.Client client = InterceptedClient.build(
     interceptors: [LoggingInterceptor()],
   );
 
-  // var cliente = http.IOClient(HttpClient(context: getContext()));
-  // var clienteTeste = http.HttpClient()
-
-  String URL() {
-    return url;
+  void getTarefas() async {
+    http.Response response = await client.get(Uri.parse("$url$buscar"));
+    print(response.body);
   }
 
-  Uri getUri() {
-    return Uri.parse("${URL()}buscar/");
-  }
-
-  Uri postUri() {
-    return Uri.parse("${URL()}criar");
-  }
-
-  Uri updateUri() {
-    return Uri.parse("${URL()}atualizar/");
-  }
-
-  Uri deleteUri() {
-    return Uri.parse("${URL()}deletar/");
-  }
-
-  criarTarefa(Tarefa tarefa) async {
-    // var context = SecurityContext()
-    //   ..setTrustedCertificatesBytes(
-    //     (await rootBundle.load('assets/cert.pem')).buffer.asUint8List(),
-    //   );
-
-    // http.Client cliente = InterceptedClient.build(
-    //     interceptors: [LoggingInterceptor()],
-    //     client: IOClient(
-    //       HttpClient(context: context)
-    //         ..badCertificateCallback =
-    //             (X509Certificate cert, String host, int port) => true,
-    //     ));
-
-    String tarefaJSON = json.encode(tarefa.toMap());
-
-    http.post(postUri(),
-        body: tarefaJSON, headers: {'Content-type': 'application/json'});
-    // http.Response response = await client.post(
-    //   postUri(),
-    //   headers: {'Content-type': 'application/json'},
-    //   body: tarefaJSON,
-    // );
-  }
-
-  buscarTarefas() async {
-    // var context = SecurityContext()
-    //   ..setTrustedCertificatesBytes(
-    //     (await rootBundle.load('assets/cert.pem')).buffer.asUint8List(),
-    //   );
-    // http.Client cliente = InterceptedClient.build(
-    //     interceptors: [LoggingInterceptor()],
-    //     client: IOClient(HttpClient(context: context)));
-    http.Response response = await client.get(getUri());
-
-    print(response);
+  void criarTarefa(Tarefa tarefa) async {
+    var mapTarefa = tarefa.toMap();
+    var jsonTarefa = json.encode(mapTarefa);
+    await client.post(
+      Uri.parse("$url$criar"),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonTarefa,
+    );
   }
 }

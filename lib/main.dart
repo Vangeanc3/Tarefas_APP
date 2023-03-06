@@ -2,13 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:tarefas_app/models/tarefa.dart';
 import 'package:tarefas_app/screens/criarTarefa.dart';
 import 'package:tarefas_app/screens/tela.dart';
-import 'package:tarefas_app/services/tarefa_service.dart';
+import 'package:tarefas_app/services/test_service.dart';
 
 void main() {
   runApp(const MyApp());
-  TarefaService().criarTarefa(
-      Tarefa(titulo: "testando", dificuldade: 5, urlFoto: 'evnjvnvi'));
-  // TarefaService().buscarTarefas();
 }
 
 class MyApp extends StatelessWidget {
