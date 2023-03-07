@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:tarefas_app/components/tarefa_card.dart';
 import 'package:tarefas_app/data/tarefa_dao.dart';
+import 'package:tarefas_app/services/tarefa_service.dart';
 
 class Tela extends StatefulWidget {
   // ignore: prefer_const_constructors_in_immutables
@@ -12,6 +13,8 @@ class Tela extends StatefulWidget {
 }
 
 class _TelaState extends State<Tela> {
+  final _tarefaService = TarefaService();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -19,18 +19,39 @@ class TarefaService {
     interceptors: [LoggingInterceptor()],
   );
 
-  void getTarefas() async {
-    http.Response response = await client.get(Uri.parse("$url$buscar"));
-    print(response.body);
-  }
-
-  void criarTarefa(Tarefa tarefa) async {
+  Future<bool> criarTarefa(Tarefa tarefa) async {
     var mapTarefa = tarefa.toMap();
     var jsonTarefa = json.encode(mapTarefa);
-    await client.post(
+    http.Response response = await client.post(
       Uri.parse("$url$criar"),
       headers: {'Content-Type': 'application/json'},
       body: jsonTarefa,
     );
+
+    if (response.statusCode != 201 || response.statusCode != 200) {
+      return false;
+    }
+    return true;
   }
+
+  Future<List<Tarefa>> getTarefas() async {
+    http.Response response = await client.get(Uri.parse("$url$buscar"));
+    print(response.body);
+
+    if (response.statusCode != 200) {
+      throw Exception();
+    }
+
+    List<Tarefa> tarefas = [];
+
+    List<dynamic> tarefasJSON = json.decode(response.body);
+    for (var tarefaJSON in tarefasJSON) {
+      Tarefa tarefa = Tarefa.fromMap(tarefaJSON);
+      tarefas.add(tarefa);
+    }
+
+    return tarefas;
+  }
+
+  
 }

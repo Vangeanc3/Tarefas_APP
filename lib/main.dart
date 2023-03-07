@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tarefas_app/models/tarefa.dart';
 import 'package:tarefas_app/screens/criarTarefa.dart';
 import 'package:tarefas_app/screens/tela.dart';
-import 'package:tarefas_app/services/test_service.dart';
-
 void main() {
   runApp(const MyApp());
 }

@@ -9,11 +9,12 @@ class Tarefa {
     required this.urlFoto,
   });
 
+  Tarefa.fromMap(Map<String, dynamic> map)
+      : titulo = map["titulo"],
+        dificuldade = map["dificuldade"],
+        urlFoto = map["urlfoto"];
+
   Map<String, dynamic> toMap() {
-    return {
-      'titulo': titulo,
-      'dificuldade': dificuldade,
-      'urlfoto': urlFoto
-    };
+    return {'titulo': titulo, 'dificuldade': dificuldade, 'urlfoto': urlFoto};
   }
 }

@@ -4,9 +4,10 @@ import '../models/tarefa.dart';
 import 'dificuldade.dart';
 
 class Tarefa_Card extends StatefulWidget {
+  
   Tarefa tarefa;
-
   Tarefa_Card(this.tarefa, {super.key});
+  
 
   int nivel = 0;
 
