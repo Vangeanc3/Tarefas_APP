@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tarefas_app/services/tarefa_service.dart';
 import '../components/tarefa_card.dart';
 import '../data/tarefa_dao.dart';
 import '../models/tarefa.dart';
@@ -14,24 +15,8 @@ class _CriarTarefaState extends State<CriarTarefa> {
   var nomeController = TextEditingController();
   var dificuldadeController = TextEditingController();
   var imageController = TextEditingController();
-
+  final service = TarefaService();
   final _formKey = GlobalKey<FormState>();
-
-  bool validarValor(String? valor) {
-    if (valor != null && valor.isEmpty) {
-      return true;
-    }
-    return false;
-  }
-
-  bool validarDificuldade(String? valor) {
-    if (valor != null && valor.isEmpty) {
-      if (int.parse(valor) > 5 || int.parse(valor) < 1) {
-        return true;
-      }
-    }
-    return false;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -152,11 +137,31 @@ class _CriarTarefaState extends State<CriarTarefa> {
   }
 
   inserirTarefa(BuildContext context) async {
-    Tarefa_Card tarefa = Tarefa_Card(Tarefa(titulo: nomeController.text, dificuldade: int.parse(dificuldadeController.text), urlFoto: imageController.text));
-    await TarefaDao().save(tarefa).then((value) {
+    Tarefa tarefa = Tarefa(
+        titulo: nomeController.text,
+        dificuldade: int.parse(dificuldadeController.text),
+        urlFoto: imageController.text);
+
+    service.criarTarefa(tarefa).then((value) {
       Future.delayed(const Duration(seconds: 1), () {
         Navigator.of(context).pop(value);
       });
     });
+  }
+
+  bool validarValor(String? valor) {
+    if (valor != null && valor.isEmpty) {
+      return true;
+    }
+    return false;
+  }
+
+  bool validarDificuldade(String? valor) {
+    if (valor != null && valor.isEmpty) {
+      if (int.parse(valor) > 5 || int.parse(valor) < 1) {
+        return true;
+      }
+    }
+    return false;
   }
 }
