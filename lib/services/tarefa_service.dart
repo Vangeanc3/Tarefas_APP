@@ -27,10 +27,10 @@ class TarefaService {
       body: jsonTarefa,
     );
 
-    if (response.statusCode != 201 || response.statusCode != 200) {
-      return false;
+    if (response.statusCode == 200) {
+      return true;
     }
-    return true;
+    return false;
   }
 
   Future<List<Tarefa>> getTarefas() async {
