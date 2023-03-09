@@ -35,7 +35,6 @@ class TarefaService {
 
   Future<List<Tarefa>> getTarefas() async {
     http.Response response = await client.get(Uri.parse("$url$buscar"));
-    print(response.body);
 
     if (response.statusCode != 200) {
       throw Exception();
@@ -44,6 +43,7 @@ class TarefaService {
     List<Tarefa> tarefas = [];
 
     List<dynamic> tarefasJSON = json.decode(response.body);
+    print("chegaram $tarefasJSON");
     for (var tarefaJSON in tarefasJSON) {
       Tarefa tarefa = Tarefa.fromMap(tarefaJSON);
       tarefas.add(tarefa);
@@ -51,6 +51,4 @@ class TarefaService {
 
     return tarefas;
   }
-
-  
 }
