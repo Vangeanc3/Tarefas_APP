@@ -4,10 +4,8 @@ import '../models/tarefa.dart';
 import 'dificuldade.dart';
 
 class Tarefa_Card extends StatefulWidget {
-  
   Tarefa tarefa;
   Tarefa_Card(this.tarefa, {super.key});
-  
 
   int nivel = 0;
 
@@ -26,7 +24,7 @@ class _Tarefa_CardState extends State<Tarefa_Card> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(10.0),
+      padding: const EdgeInsets.all(10.0),
       child: Stack(children: [
         Container(
           height: 140,

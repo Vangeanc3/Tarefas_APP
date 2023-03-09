@@ -2,10 +2,10 @@
 import 'package:flutter/material.dart';
 import 'package:tarefas_app/components/tarefa_card.dart';
 import 'package:tarefas_app/data/tarefa_dao.dart';
+import 'package:tarefas_app/models/tarefa.dart';
 import 'package:tarefas_app/services/tarefa_service.dart';
 
 class Tela extends StatefulWidget {
-  // ignore: prefer_const_constructors_in_immutables
   const Tela({super.key});
 
   @override
@@ -14,6 +14,13 @@ class Tela extends StatefulWidget {
 
 class _TelaState extends State<Tela> {
   final _tarefaService = TarefaService();
+  List<Tarefa_Card> tarefaCards = [];
+
+  @override
+  void initState() {
+    carregaTarefaCards();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,77 +31,18 @@ class _TelaState extends State<Tela> {
         actions: [
           IconButton(
               onPressed: () {
-                setState(() {});
+                setState(() {
+                  tarefaCards;
+                });
               },
               icon: const Icon(Icons.refresh))
         ],
       ),
       body: Padding(
         padding: const EdgeInsets.only(top: 8, bottom: 70),
-        child: FutureBuilder<List<Tarefa_Card>>(
-            future: TarefaDao().findAll(),
-            builder: (context, snapshot) {
-              List<Tarefa_Card>? items = snapshot.data;
-              switch (snapshot.connectionState) {
-                case ConnectionState.none:
-                  return Center(
-                    child: Column(
-                      children: const [
-                        CircularProgressIndicator(),
-                        Text('Carregando'),
-                      ],
-                    ),
-                  );
-
-                case ConnectionState.waiting:
-                  return Center(
-                    child: Column(
-                      children: const [
-                        CircularProgressIndicator(),
-                        Text('Carregando'),
-                      ],
-                    ),
-                  );
-                case ConnectionState.active:
-                  return Center(
-                    child: Column(
-                      children: const [
-                        CircularProgressIndicator(),
-                        Text('Carregando'),
-                      ],
-                    ),
-                  );
-                case ConnectionState.done:
-                  if (snapshot.hasData && items != null) {
-                    if (items.isNotEmpty) {
-                      return ListView.builder(
-                          itemCount: items.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            final Tarefa_Card tarefa = items[index];
-                            return tarefa;
-                          });
-                    }
-                    return Center(
-                        child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      // não implementado em vídeo por descuido meu, desculpem.
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      // essa linha de layout deixa o conteudo totalmente centralizado.
-                      children: const [
-                        Icon(
-                          Icons.error_outline,
-                          size: 128,
-                        ),
-                        Text(
-                          'Não há nenhuma Tarefa',
-                          style: TextStyle(fontSize: 32),
-                        ),
-                      ],
-                    ));
-                  }
-                  return const Text('Erro ao carregar tarefas');
-              }
-            }),
+        child: ListView(
+          children: tarefaCards,
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => navegarAtualizar(context),
@@ -119,6 +67,17 @@ class _TelaState extends State<Tela> {
           ));
           break;
         default:
+      }
+    });
+  }
+
+  void carregaTarefaCards() async {
+    List<Tarefa> tarefas = await TarefaService().getTarefas();
+
+    setState(() {
+      tarefaCards;
+      for (var tarefa in tarefas) {
+        tarefaCards.add(Tarefa_Card(tarefa));
       }
     });
   }
