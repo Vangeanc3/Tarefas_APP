@@ -143,10 +143,9 @@ class _CriarTarefaState extends State<CriarTarefa> {
         urlFoto: imageController.text);
 
     service.criarTarefa(tarefa).then((value) {
-      Future.delayed(const Duration(seconds: 1), () {
         Navigator.of(context).pop(value);
       });
-    });
+    }
   }
 
   bool validarValor(String? valor) {
@@ -164,4 +163,3 @@ class _CriarTarefaState extends State<CriarTarefa> {
     }
     return false;
   }
-}

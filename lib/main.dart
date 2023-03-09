@@ -4,7 +4,6 @@ import 'package:tarefas_app/screens/tela.dart';
 import 'package:tarefas_app/services/tarefa_service.dart';
 
 void main() {
-  TarefaService().getTarefas();
   runApp(const MyApp());
 }
 

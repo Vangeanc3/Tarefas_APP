@@ -13,7 +13,6 @@ class Tela extends StatefulWidget {
 }
 
 class _TelaState extends State<Tela> {
-  final _tarefaService = TarefaService();
   List<Tarefa_Card> tarefaCards = [];
 
   @override
@@ -32,7 +31,7 @@ class _TelaState extends State<Tela> {
           IconButton(
               onPressed: () {
                 setState(() {
-                  tarefaCards;
+                  carregaTarefaCards();
                 });
               },
               icon: const Icon(Icons.refresh))
@@ -65,6 +64,7 @@ class _TelaState extends State<Tela> {
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text("Sucesso em adicionar a tarefa"),
           ));
+          carregaTarefaCards();
           break;
         default:
       }
@@ -75,7 +75,7 @@ class _TelaState extends State<Tela> {
     List<Tarefa> tarefas = await TarefaService().getTarefas();
 
     setState(() {
-      tarefaCards;
+      tarefaCards = [];
       for (var tarefa in tarefas) {
         tarefaCards.add(Tarefa_Card(tarefa));
       }
